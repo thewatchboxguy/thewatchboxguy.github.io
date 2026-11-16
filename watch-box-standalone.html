@@ -37,10 +37,10 @@
 :root{
   --bg:#e7ded0; --surface:#f7f2e9; --surface-2:#efe7d9;
   --fg:#2b2420; --muted:#6f6555; --line:#d6c9b4;
-  --accent:#9a6b3a; --accent-ink:#6b4522; --danger:#9a3b2e;
+  --accent:#9a6b3a; --accent-ink:#6b4522; --danger:#9a3b2e; --good:#2f6f55;
   --shadow:rgba(40,28,16,.28);
   --wood-1:#7a4e2c; --wood-2:#4d2f19; --wood-3:#8f5a32; --wood-4:#39220f; --wood-edge:#2d1a0c;
-  --felt-1:#20453a; --felt-2:#143026; --felt-shadow:rgba(0,0,0,.55);
+  --felt-1:#20453a; --felt-2:#143026; --felt-top:#2a5548; --felt-shadow:rgba(0,0,0,.55);
   --brass-1:#e8cd86; --brass-2:#c9a24b; --brass-3:#9c7a33; --plate-ink:#3a2a12;
   --radius:14px; --maxw:1120px;
   --f-display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
@@ -51,14 +51,14 @@
   :root:not([data-theme="light"]){
     --bg:#161210; --surface:#231d17; --surface-2:#1b1611;
     --fg:#ece4d7; --muted:#a99d8b; --line:#352c22;
-    --accent:#d6a660; --accent-ink:#edcb92; --danger:#e08a7b;
+    --accent:#d6a660; --accent-ink:#edcb92; --danger:#e08a7b; --good:#6bbf97;
     --shadow:rgba(0,0,0,.5); color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#161210; --surface:#231d17; --surface-2:#1b1611;
   --fg:#ece4d7; --muted:#a99d8b; --line:#352c22;
-  --accent:#d6a660; --accent-ink:#edcb92; --danger:#e08a7b;
+  --accent:#d6a660; --accent-ink:#edcb92; --danger:#e08a7b; --good:#6bbf97;
   --shadow:rgba(0,0,0,.5); color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -75,27 +75,72 @@ body{
   padding-left:max(16px,env(safe-area-inset-left,0px));
   padding-right:max(16px,env(safe-area-inset-right,0px));
 }
-.topbar{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:22px}
-.brand h1{font-family:var(--f-display);font-weight:600;font-size:clamp(2.1rem,5.5vw,3.1rem);line-height:.98;margin:0;letter-spacing:.01em;text-wrap:balance}
-.brand .tagline{margin:.3rem 0 0;font-size:.74rem;letter-spacing:.32em;text-transform:uppercase;color:var(--muted)}
-.stats{display:flex;gap:22px;align-items:flex-end;flex-wrap:wrap;flex:1 1 auto}
-.stat{line-height:1.05}
-.stat b{font-family:var(--f-display);font-size:1.7rem;font-weight:600;display:block;font-variant-numeric:tabular-nums}
-.stat span{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
-.icon-btn{background:none;border:1px solid var(--line);color:var(--muted);height:38px;min-width:38px;padding:0 12px;border-radius:999px;cursor:pointer;font-size:.8rem;font-family:var(--f-ui);display:inline-flex;align-items:center;gap:6px;transition:.2s;text-decoration:none}
+/* ---- header + navigation (bottom tab bar on phones, top nav on desktop) ---- */
+.topbar{margin-bottom:14px}
+.brandrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand h1{font-family:var(--f-display);font-weight:600;font-size:clamp(2rem,5.2vw,2.9rem);line-height:1;margin:0;letter-spacing:.01em;text-wrap:balance}
+.brand .tagline{margin:.3rem 0 0;font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.icon-btn{background:none;border:1px solid var(--line);color:var(--muted);height:38px;min-width:38px;padding:0 12px;border-radius:999px;cursor:pointer;font-size:1rem;font-family:var(--f-ui);display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:.2s;text-decoration:none}
 .icon-btn:hover{color:var(--fg);border-color:var(--accent)}
-.tools{display:flex;gap:8px;align-items:center;margin-left:auto;position:relative}
-.tools-group{display:flex;gap:8px;align-items:center}
-.tools-toggle{display:none;font-size:1.15rem;line-height:1}
-.controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
-.filters{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:4px;gap:2px}
-.filters button{border:0;background:none;cursor:pointer;color:var(--muted);font-family:var(--f-ui);font-size:.82rem;font-weight:500;padding:7px 16px;border-radius:999px;transition:.18s;letter-spacing:.02em;display:inline-flex;align-items:center;gap:7px}
-.filters button .n{font-size:.72rem;background:color-mix(in srgb,var(--muted) 20%,transparent);color:var(--muted);border-radius:999px;padding:1px 7px;font-variant-numeric:tabular-nums}
-.filters button[aria-selected="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px var(--shadow)}
-.filters button[aria-selected="true"] .n{background:var(--accent);color:#fff}
-.search{flex:1 1 200px;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:9px 16px;color:var(--fg);font-family:var(--f-ui);font-size:.9rem}
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.pills{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:4px;gap:2px}
+.pills button{border:0;background:none;cursor:pointer;color:var(--muted);font-family:var(--f-ui);font-size:.82rem;font-weight:500;padding:7px 15px;border-radius:999px;transition:.18s;letter-spacing:.02em;display:inline-flex;align-items:center;gap:7px}
+.pills button:hover{color:var(--fg)}
+.pills button .n{font-size:.72rem;background:color-mix(in srgb,var(--muted) 20%,transparent);color:var(--muted);border-radius:999px;padding:1px 7px;font-variant-numeric:tabular-nums}
+.pills button[aria-selected="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px var(--shadow)}
+.pills button[aria-selected="true"] .n{background:var(--accent);color:#fff}
+.spacer{flex:1}
+.search{flex:0 1 240px;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:9px 16px;color:var(--fg);font-family:var(--f-ui);font-size:.9rem}
 .search::placeholder{color:var(--muted)}
-.search:focus-visible,.filters button:focus-visible,.icon-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.search:focus-visible,.pills button:focus-visible,.icon-btn:focus-visible,.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.only-mobile{display:none}
+/* views */
+.view{display:none}
+.view.on{display:block}
+.viewhead{font-family:var(--f-display);font-size:1.6rem;font-weight:600;margin:4px 2px 12px}
+/* stats view */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+.stat-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.stat-card b{font-family:var(--f-display);font-size:1.9rem;font-weight:600;display:block;line-height:1.05;font-variant-numeric:tabular-nums}
+.stat-card b.g{color:var(--good)}
+.stat-card span{font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:block;margin-top:8px}
+.panel{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.panel h4{margin:0 0 14px;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.split{height:12px;border-radius:999px;overflow:hidden;display:flex;background:var(--surface-2)}
+.split i{display:block;height:100%}
+.split .own{background:var(--felt-top)}.split .wsh{background:var(--brass-2)}
+.legend{display:flex;gap:18px;margin-top:12px;font-size:.78rem;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.brow{display:grid;grid-template-columns:1fr auto;gap:3px 12px;margin-bottom:13px}
+.brow .bn{font-size:.9rem}
+.brow .bv{font-size:.9rem;font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.brow .bbar{grid-column:1/-1;height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin-top:3px}
+.brow .bbar i{display:block;height:100%;background:linear-gradient(90deg,var(--brass-3),var(--brass-2))}
+.stats-empty{color:var(--muted);font-size:.9rem;margin:0}
+/* bottom tab bar (shown on phones only) */
+.tabbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:40;align-items:flex-end;justify-content:space-around;background:var(--surface);border-top:1px solid var(--line);padding:7px 8px calc(7px + env(safe-area-inset-bottom,0px));padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;border:0;background:none;cursor:pointer;color:var(--muted);font-family:var(--f-ui);font-size:.58rem;font-weight:500;letter-spacing:.03em;padding:4px 0}
+.tab svg{width:22px;height:22px}
+.tab[aria-current="true"]{color:var(--accent-ink)}
+.fab{flex:0 0 auto;width:52px;height:52px;border-radius:50%;margin:0 4px -14px;border:0;cursor:pointer;background:linear-gradient(180deg,var(--brass-1),var(--brass-2));color:#2a1c08;box-shadow:0 6px 16px -4px color-mix(in srgb,var(--brass-3) 70%,transparent),0 0 0 5px var(--bg);display:grid;place-items:center}
+.fab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.fab svg{width:26px;height:26px}
+/* More sheet */
+.more-overlay{position:fixed;inset:0;background:rgba(20,12,6,.55);backdrop-filter:blur(3px);display:none;place-items:end center;z-index:60}
+.more-overlay.on{display:grid}
+.more-sheet{background:var(--surface);border:1px solid var(--line);border-radius:18px 18px 0 0;width:min(520px,100%);padding:8px 12px calc(14px + env(safe-area-inset-bottom,0px));box-shadow:0 -20px 60px -20px rgba(0,0,0,.6)}
+.more-head{display:flex;align-items:center;justify-content:space-between;padding:8px 8px 6px}
+.more-head h3{font-family:var(--f-display);font-weight:600;font-size:1.3rem;margin:0}
+.menu-item{display:flex;align-items:center;gap:12px;width:100%;border:0;background:none;text-align:left;cursor:pointer;font-family:var(--f-ui);font-size:.95rem;color:var(--fg);padding:13px 12px;border-radius:12px;text-decoration:none}
+.menu-item:hover{background:var(--surface-2)}
+.menu-item .g{font-size:1.1rem;width:24px;text-align:center}
+/* notes on the detail view */
+.detail-notes{margin:16px 0 0;white-space:pre-wrap;font-size:.92rem;line-height:1.55;color:var(--fg)}
+.detail-notes .dn-label{display:block;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:5px}
+@media(min-width:721px){
+  .more-overlay.on{place-items:start end;padding:70px 24px}
+  .more-sheet{border-radius:14px;width:286px}
+}
 .btn{font-family:var(--f-ui);font-weight:500;font-size:.88rem;cursor:pointer;border-radius:999px;padding:10px 20px;border:1px solid transparent;transition:.18s;display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
 .btn-primary{background:linear-gradient(180deg,var(--brass-1),var(--brass-2));color:#2a1c08;border-color:var(--brass-3);box-shadow:0 2px 8px color-mix(in srgb,var(--brass-3) 40%,transparent);letter-spacing:.02em}
 .btn-primary:hover{filter:brightness(1.05)}
@@ -104,39 +149,36 @@ body{
 .btn-danger{background:none;color:var(--danger);border-color:color-mix(in srgb,var(--danger) 45%,transparent)}
 .btn-danger:hover{background:color-mix(in srgb,var(--danger) 12%,transparent)}
 .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.box{position:relative;border-radius:22px;padding:18px;
-  background:repeating-linear-gradient(94deg, color-mix(in srgb,var(--wood-4) 55%,transparent) 0 2px, transparent 2px 7px),
-    repeating-linear-gradient(90deg, var(--wood-2) 0 3px, var(--wood-1) 3px 9px, var(--wood-3) 9px 13px, var(--wood-1) 13px 18px),
-    linear-gradient(160deg,var(--wood-3),var(--wood-2));
-  box-shadow:0 2px 0 color-mix(in srgb,var(--brass-1) 30%,transparent) inset,0 24px 50px -18px var(--shadow),0 0 0 1px var(--wood-edge)}
-.box::after{content:"";position:absolute;inset:7px;border-radius:16px;pointer-events:none;border:2px solid color-mix(in srgb,var(--brass-2) 35%,transparent);box-shadow:0 0 0 1px var(--wood-edge) inset}
-.box-interior{position:relative;border-radius:12px;padding:clamp(12px,2.4vw,24px);
-  background:radial-gradient(130% 120% at 50% 0%, color-mix(in srgb,var(--felt-1) 85%,#000 0%), var(--felt-2)),var(--felt-2);
-  box-shadow:0 10px 26px var(--felt-shadow) inset,0 1px 0 rgba(255,255,255,.04) inset}
+/* Refined A: no wooden box — watches are clean cards floating on the calm page. */
+.box{position:relative}
+.box::after{display:none}
+.box-interior{position:relative;padding:0}
 .grid{display:grid;gap:clamp(12px,2vw,20px);grid-template-columns:repeat(auto-fill,minmax(146px,1fr));align-items:start}
-.slot{position:relative;border-radius:11px;
-  background:radial-gradient(120% 120% at 50% 18%, color-mix(in srgb,var(--felt-1) 70%,#000), var(--felt-2));
-  box-shadow:0 7px 16px var(--felt-shadow) inset,0 1px 0 rgba(255,255,255,.05);
-  border:1px solid rgba(0,0,0,.35);cursor:pointer;overflow:hidden;display:flex;flex-direction:column;
+.slot{position:relative;border-radius:14px;
+  background:var(--surface);
+  box-shadow:0 1px 2px rgba(0,0,0,.05),0 10px 22px -16px rgba(0,0,0,.6);
+  border:1px solid var(--line);cursor:pointer;overflow:hidden;display:flex;flex-direction:column;
   transition:transform .18s ease, box-shadow .18s ease;text-align:left;width:100%;font-family:inherit;color:inherit;padding:0}
-.slot:hover,.slot:focus-visible{transform:translateY(-3px);box-shadow:0 7px 16px var(--felt-shadow) inset,0 10px 22px -8px rgba(0,0,0,.6);outline:none}
-.slot:focus-visible{box-shadow:0 7px 16px var(--felt-shadow) inset,0 0 0 2px var(--brass-1)}
-.slot .pic{aspect-ratio:1;width:100%;position:relative;display:grid;place-items:center;overflow:hidden}
+.slot:hover,.slot:focus-visible{transform:translateY(-3px);box-shadow:0 1px 2px rgba(0,0,0,.05),0 16px 28px -14px rgba(0,0,0,.6);outline:none}
+.slot:focus-visible{box-shadow:0 1px 2px rgba(0,0,0,.05),0 0 0 2px var(--brass-2)}
+.slot .pic{aspect-ratio:1;width:100%;position:relative;display:grid;place-items:center;overflow:hidden;
+  background:radial-gradient(120% 120% at 50% 16%, var(--felt-top), var(--felt-2));
+  box-shadow:0 6px 16px rgba(0,0,0,.3) inset}
 .slot .pic img{width:100%;height:100%;object-fit:cover;display:block}
 .slot .pic .vig{position:absolute;inset:0;background:radial-gradient(70% 70% at 50% 40%,transparent 55%,rgba(0,0,0,.45));pointer-events:none}
 .silhouette{width:62%;height:62%;opacity:.5;color:var(--brass-1)}
 .slot.wish .pic img,.slot.wish .silhouette{filter:saturate(.82)}
-.nameplate{position:relative;background:linear-gradient(180deg,var(--brass-1),var(--brass-2) 55%,var(--brass-3));color:var(--plate-ink);padding:8px 10px;display:flex;flex-direction:column;gap:2px;border-top:1px solid color-mix(in srgb,var(--brass-1) 80%,#fff);box-shadow:0 -2px 6px rgba(0,0,0,.3)}
+.nameplate{position:relative;background:linear-gradient(180deg,var(--brass-1),var(--brass-2) 60%,var(--brass-3));color:var(--plate-ink);padding:7px 11px 8px;display:flex;flex-direction:column;gap:2px;border-top:1px solid rgba(255,255,255,.45)}
 .nameplate .mk{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .nameplate .md{font-family:var(--f-display);font-weight:600;font-size:1rem;line-height:1.14;overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;height:2.28em}
 .nameplate .pr{font-size:.76rem;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:.01em;color:var(--plate-ink);opacity:.8;height:1.15em;line-height:1.15;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .wl-book{position:absolute;top:8px;right:10px;line-height:0;color:rgba(55,40,16,.6);filter:drop-shadow(0 .7px 0 rgba(255,250,228,.85))}
 .wl-book svg{display:block}
 .slot.wish .nameplate .mk{padding-right:18px}
-.slot.add{aspect-ratio:1;cursor:pointer;border:1.5px dashed color-mix(in srgb,var(--brass-1) 45%,transparent);background:radial-gradient(120% 120% at 50% 20%, color-mix(in srgb,var(--felt-1) 55%,#000), var(--felt-2));align-items:center;justify-content:center;color:var(--brass-1)}
+.slot.add{aspect-ratio:1;cursor:pointer;border:1.5px dashed color-mix(in srgb,var(--accent) 42%,var(--line));background:color-mix(in srgb,var(--accent) 5%,var(--surface));box-shadow:none;align-items:center;justify-content:center;color:var(--accent-ink)}
 .slot.add .plus{font-size:2.2rem;line-height:1;font-weight:300}
 .slot.add .lbl{font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;margin-top:6px;opacity:.85}
-.slot.ghost{aspect-ratio:1;cursor:default;opacity:.5;box-shadow:0 7px 16px var(--felt-shadow) inset}
+.slot.ghost{aspect-ratio:1;cursor:default;opacity:.5;background:none;border:1px dashed var(--line);box-shadow:none}
 .slot.ghost:hover{transform:none}
 .slot[draggable="true"]{cursor:grab}
 .slot.dragging{opacity:.45;cursor:grabbing}
@@ -144,7 +186,7 @@ body{
 .slot.drop-before::after{left:-8px}
 .slot.drop-after::after{right:-8px}
 .reorder-hint{color:var(--muted);font-size:.74rem;letter-spacing:.04em;margin:14px 2px 0;text-align:center}
-.empty-note{text-align:center;color:color-mix(in srgb,var(--brass-1) 80%,#fff);font-family:var(--f-display);font-size:1.3rem;margin:4px 0 16px;letter-spacing:.01em}
+.empty-note{text-align:center;color:var(--accent-ink);font-family:var(--f-display);font-size:1.3rem;margin:4px 0 16px;letter-spacing:.01em}
 .banner{background:color-mix(in srgb,var(--accent) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);color:var(--fg);border-radius:12px;padding:12px 16px;margin-bottom:18px;font-size:.88rem}
 .overlay{position:fixed;inset:0;background:rgba(20,12,6,.6);backdrop-filter:blur(3px);display:grid;place-items:center;padding:16px;z-index:50;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .sheet{background:var(--surface);color:var(--fg);border-radius:18px;width:min(720px,100%);max-height:90vh;overflow:auto;box-shadow:0 30px 70px -20px rgba(0,0,0,.6);border:1px solid var(--line)}
@@ -154,7 +196,7 @@ body{
 .x:hover{color:var(--fg);background:var(--surface-2)}
 .sheet-body{padding:22px}
 .detail{display:grid;grid-template-columns:1fr 1.1fr;gap:24px}
-.detail .photo{aspect-ratio:1;border-radius:14px;overflow:hidden;background:radial-gradient(120% 120% at 50% 20%,var(--felt-1),var(--felt-2));display:grid;place-items:center;box-shadow:0 8px 20px var(--felt-shadow) inset}
+.detail .photo{aspect-ratio:1;border-radius:14px;overflow:hidden;background:radial-gradient(120% 120% at 50% 18%,var(--felt-top),var(--felt-2));display:grid;place-items:center;box-shadow:0 8px 20px var(--felt-shadow) inset}
 .detail .photo img{width:100%;height:100%;object-fit:cover}
 .detail .photo .silhouette{width:55%;height:55%}
 .detail h3{font-family:var(--f-display);font-weight:600;font-size:2rem;margin:.1rem 0 0;line-height:1}
@@ -173,8 +215,9 @@ dl.specs dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-siz
 .field{display:flex;flex-direction:column;gap:5px;min-width:0}
 .field.full{grid-column:1 / -1}
 .field label{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
-.field input,.field select{font-family:var(--f-ui);font-size:.92rem;color:var(--fg);background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:10px 12px;width:100%;min-width:0}
-.field input:focus-visible,.field select:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.field input,.field select,.field textarea{font-family:var(--f-ui);font-size:.92rem;color:var(--fg);background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:10px 12px;width:100%;min-width:0}
+.field textarea{resize:vertical;min-height:84px;line-height:1.5}
+.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
 .hint{font-size:.74rem;color:var(--muted)}
 .cost-row{display:grid;grid-template-columns:1fr 92px;gap:8px}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface-2);width:100%}
@@ -187,13 +230,22 @@ dl.specs dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-siz
 .form-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}
 .err{color:var(--danger);font-size:.82rem;margin-top:10px;min-height:1em}
 .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-@media (max-width:620px){.detail{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.stats{gap:16px}
-  .topbar{position:relative}
-  .tools{position:absolute;top:0;right:0;margin-left:0}
-  .tools-toggle{display:inline-flex}
-  .tools-group{position:absolute;top:calc(100% + 8px);right:0;z-index:40;flex-direction:column;align-items:stretch;gap:6px;min-width:172px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px;box-shadow:0 14px 34px -12px var(--shadow);display:none}
-  .tools-group.open{display:flex}
-  .tools-group .icon-btn{width:100%;justify-content:flex-start;height:40px}}
+.link-add{grid-column:1 / -1;padding:13px 14px;border-radius:12px;background:color-mix(in srgb,var(--accent) 7%,var(--surface-2));border:1px solid color-mix(in srgb,var(--accent) 30%,var(--line))}
+.link-add>label{display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink);font-weight:600;margin-bottom:8px}
+.link-row{display:flex;gap:8px}
+.link-row input{flex:1;min-width:0;font-family:var(--f-ui);font-size:.9rem;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:10px 12px}
+.link-row input:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.link-row .btn{flex:none;white-space:nowrap}
+.link-add .hint{display:block;margin-top:8px}
+.link-add .hint.working{color:var(--accent-ink)}
+@media (max-width:720px){.detail{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}
+  .only-desktop{display:none!important}
+  .only-mobile{display:inline-flex}
+  .toolbar{margin-top:10px}
+  .search{flex:1 1 100%}
+  .tabbar{display:flex}
+  .wrap{padding-bottom:86px}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 .site-foot{margin:26px 2px 0;text-align:center;display:flex;flex-direction:column;gap:6px}
 .site-foot .privacy{margin:0;color:var(--muted);font-size:.78rem;letter-spacing:.02em}
@@ -211,48 +263,55 @@ dl.specs dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-siz
 <body>
 <div class="wrap">
   <header class="topbar">
-    <div class="brand">
-      <h1>The Watch Box</h1>
-      <p class="tagline">Collection &amp; wishlist</p>
-    </div>
-    <div class="stats">
-      <div class="stat"><b id="statOwned">0</b><span>In collection</span></div>
-      <div class="stat"><b id="statWish">0</b><span>On the wishlist</span></div>
-      <div class="stat"><b id="statValue">—</b><span>Collection value</span></div>
-      <div class="stat"><b id="statWishValue">—</b><span>Wishlist value</span></div>
-      <div class="tools">
-        <button class="icon-btn tools-toggle" id="toolsToggle" aria-haspopup="true" aria-expanded="false" aria-controls="toolsGroup" aria-label="More options" title="More options">⋯</button>
-        <div class="tools-group" id="toolsGroup">
-          <a class="icon-btn" href="https://thewatchboxguy.github.io/guide.html" target="_blank" rel="noopener" title="Open the Quick Start guide">❔ Guide</a>
-          <button class="icon-btn" id="backupBtn" title="Export a backup file">⇩ Backup</button>
-          <button class="icon-btn" id="restoreBtn" title="Import a backup file">⇧ Restore</button>
-          <button class="icon-btn" id="themeBtn" title="Switch light / dark" aria-label="Switch light or dark theme">◐</button>
-        </div>
-        <input id="restoreInput" type="file" accept="application/json,.json,text/plain,.txt" class="visually-hidden">
+    <div class="brandrow">
+      <div class="brand">
+        <h1>The Watch Box</h1>
+        <p class="tagline">Collection &amp; wishlist</p>
       </div>
+      <button class="icon-btn only-mobile" id="moreBtnM" aria-haspopup="true" aria-label="More options" title="More options">⋯</button>
+    </div>
+    <div class="toolbar">
+      <nav class="pills only-desktop" id="nav" role="tablist" aria-label="Views">
+        <button role="tab" aria-selected="true" data-view="all">All <span class="n" id="nAll">0</span></button>
+        <button role="tab" aria-selected="false" data-view="owned">Collection <span class="n" id="nOwned">0</span></button>
+        <button role="tab" aria-selected="false" data-view="wish">Wishlist <span class="n" id="nWish">0</span></button>
+        <button role="tab" aria-selected="false" data-view="stats">Stats</button>
+      </nav>
+      <span class="spacer only-desktop"></span>
+      <input class="search" id="search" type="search" placeholder="Search brand, model or reference…" aria-label="Search watches">
+      <button class="btn btn-primary only-desktop" id="addBtn">＋ Add watch</button>
+      <button class="icon-btn only-desktop" id="themeBtn" title="Switch light / dark" aria-label="Switch light or dark theme">◐</button>
+      <button class="icon-btn only-desktop" id="moreBtnD" aria-haspopup="true" aria-label="More options" title="More options">⋯</button>
     </div>
   </header>
 
   <div id="banner" class="banner" hidden></div>
   <div id="backupTip" class="banner backup-tip" hidden></div>
 
-  <div class="controls">
-    <div class="filters" role="tablist" aria-label="Filter watches">
-      <button role="tab" aria-selected="true" data-filter="all">All <span class="n" id="nAll">0</span></button>
-      <button role="tab" aria-selected="false" data-filter="owned">Collection <span class="n" id="nOwned">0</span></button>
-      <button role="tab" aria-selected="false" data-filter="wish">Wishlist <span class="n" id="nWish">0</span></button>
-    </div>
-    <input class="search" id="search" type="search" placeholder="Search brand, model or reference…" aria-label="Search watches">
-    <button class="btn btn-primary" id="addBtn">＋ Add watch</button>
-  </div>
+  <section class="view on" id="view-grid">
+    <main class="box">
+      <div class="box-interior">
+        <p class="empty-note" id="emptyNote" hidden>Your box is empty — add your first watch.</p>
+        <div class="grid" id="grid"></div>
+      </div>
+    </main>
+    <p class="reorder-hint" id="reorderHint" hidden>Drag a watch to reorder it within the box.</p>
+  </section>
 
-  <main class="box">
-    <div class="box-interior">
-      <p class="empty-note" id="emptyNote" hidden>Your box is empty — add your first watch.</p>
-      <div class="grid" id="grid"></div>
+  <section class="view" id="view-stats">
+    <h2 class="viewhead">Your box at a glance</h2>
+    <div class="stats-grid">
+      <div class="stat-card"><b id="statOwned">0</b><span>In collection</span></div>
+      <div class="stat-card"><b id="statWish">0</b><span>On the wishlist</span></div>
+      <div class="stat-card"><b class="g" id="statValue">—</b><span>Collection value</span></div>
+      <div class="stat-card"><b id="statWishValue">—</b><span>Wishlist value</span></div>
     </div>
-  </main>
-  <p class="reorder-hint" id="reorderHint" hidden>Drag a watch to reorder it within the box.</p>
+    <div class="panel"><h4>Collection value by brand</h4><div id="byBrand"></div></div>
+    <div class="panel"><h4>Collection vs wishlist value</h4>
+      <div class="split"><i class="own" id="spOwn"></i><i class="wsh" id="spWsh"></i></div>
+      <div class="legend"><span><i style="background:var(--felt-top)"></i>Collection</span><span><i style="background:var(--brass-2)"></i>Wishlist</span></div>
+    </div>
+  </section>
   <footer class="site-foot">
     <p class="privacy">Your watches are saved on this device only — no account, no sign-in, and your collection is never uploaded or shared.</p>
     <p class="foot-links">
@@ -261,6 +320,25 @@ dl.specs dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-siz
     </p>
     <p class="credit">The Watch Box · made by <span>the watchboxguy</span></p>
   </footer>
+
+  <nav class="tabbar" id="tabbar" aria-label="Sections">
+    <button class="tab" data-view="all" aria-current="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>All</button>
+    <button class="tab" data-view="owned" aria-current="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="7"/><path d="M12 8v4l3 2"/></svg>Collection</button>
+    <button class="fab" id="fab" aria-label="Add a watch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button class="tab" data-view="wish" aria-current="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 20s-7-4.5-7-9a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 4.5-7 9-7 9z"/></svg>Wishlist</button>
+    <button class="tab" data-view="stats" aria-current="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M20 20H3"/></svg>Stats</button>
+  </nav>
+
+  <div class="more-overlay" id="moreOverlay">
+    <div class="more-sheet" role="dialog" aria-modal="true" aria-label="More">
+      <div class="more-head"><h3>More</h3><button class="x" id="moreClose" aria-label="Close">×</button></div>
+      <a class="menu-item" href="https://thewatchboxguy.github.io/guide.html" target="_blank" rel="noopener"><span class="g">❔</span> Quick Start guide</a>
+      <button class="menu-item" id="backupBtn"><span class="g">⇩</span> Backup your collection</button>
+      <button class="menu-item" id="restoreBtn"><span class="g">⇧</span> Restore from a backup</button>
+      <button class="menu-item only-mobile" id="themeBtnM"><span class="g">◐</span> Switch light / dark</button>
+      <input id="restoreInput" type="file" accept="application/json,.json,text/plain,.txt" class="visually-hidden">
+    </div>
+  </div>
 </div>
 <datalist id="brands"></datalist>
 
@@ -269,6 +347,9 @@ dl.specs dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;font-siz
 const KEY="watchbox.v1";
 const CURRENCIES=["USD","EUR","GBP","JPY","CHF","AUD","CAD","BRL","SEK","SGD","HKD","AED"];
 const CUR_SYMBOL={USD:"$",EUR:"€",GBP:"£",JPY:"¥",CHF:"CHF ",AUD:"A$",CAD:"C$",BRL:"R$",SEK:"kr ",SGD:"S$",HKD:"HK$",AED:"AED "};
+/* "Add from a link": a tiny Cloudflare Worker reads a shop page server-side and
+   returns {brand,model,price,currency,image}. It logs nothing — your privacy holds. */
+const WORKER_URL="https://watchbox-link.gibameister.workers.dev/";
 const SILHOUETTE=`<svg class="silhouette" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
   <circle cx="50" cy="52" r="24"/>
   <path d="M40 28 L42 15 H58 L60 28" stroke-linejoin="round"/>
@@ -282,7 +363,7 @@ const SILHOUETTE=`<svg class="silhouette" viewBox="0 0 100 100" fill="none" stro
 const BRANDS=["A. Lange & Söhne","Alpina","Angelus","Apple","Arnold & Son","Audemars Piguet","Baltic","Ball","Baume & Mercier","Bell & Ross","Blancpain","Breguet","Breitling","Bremont","Bulgari","Bulova","Cartier","Casio","Certina","Chopard","Christopher Ward","Chronoswiss","Citizen","Corum","Doxa","Ebel","Eterna","Farer","Formex","Fortis","Franck Muller","Frederique Constant","Garmin","Girard-Perregaux","Glashütte Original","Grand Seiko","Hamilton","Hanhart","H. Moser & Cie","Hublot","IWC","Jaeger-LeCoultre","Junghans","Laco","Longines","Lorier","Louis Vuitton","Maurice Lacroix","MeisterSinger","Mido","Mondaine","Montblanc","Monta","Movado","Mühle Glashütte","Nivada Grenchen","Nomos Glashütte","Omega","Orient","Oris","Panerai","Parmigiani Fleurier","Patek Philippe","Piaget","Rado","Raymond Weil","Richard Mille","Roger Dubuis","Rolex","Seiko","Serica","Sinn","Squale","Stowa","Swatch","TAG Heuer","Timex","Tissot","Tudor","Tutima","Ulysse Nardin","Unimatic","Vacheron Constantin","Victorinox","Vostok","Yema","Zenith","Zodiac"];
 
 let watches=[];           // [{id, brand, model, reference, movement, dial, lug, purchased, purchaseDate, cost, currency, image, createdAt}]
-let filter="all", search="", editingId=null, pendingImage=undefined; // undefined=keep, null=remove, string=new
+let filter="all", search="", editingId=null, pendingImage=undefined, navView="all"; // undefined=keep, null=remove, string=new
 
 const $=s=>document.querySelector(s);
 const grid=$("#grid");
@@ -324,7 +405,7 @@ function maybeBackupTip(){
   const el=$("#backupTip"); if(!el)return;
   let acked=false; try{acked=!!localStorage.getItem("wb-backup-ack");}catch(e){}
   if(acked||!watches.length){el.hidden=true;return;}
-  const where=matchMedia("(max-width:620px)").matches?"the ⋯ menu (top-right)":"the top-right of the page";
+  const where="the ⋯ More menu (top-right)";
   el.innerHTML='Your watches are saved only in this browser. Export a <strong>Backup</strong> from time to time so a cleared browser or a new phone can’t lose them — Backup is in '+where+'. <button class="btn btn-ghost" id="bkNow">Backup now</button><button class="tip-dismiss" id="bkAck">Got it</button>';
   el.hidden=false;
   const ack=()=>{el.hidden=true;try{localStorage.setItem("wb-backup-ack","1");}catch(e){}};
@@ -336,27 +417,24 @@ function maybeBackupTip(){
 (function(){
   try{const t=localStorage.getItem("wb-theme"); if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}
 })();
-$("#themeBtn").addEventListener("click",()=>{
+function toggleTheme(){
   const cur=document.documentElement.getAttribute("data-theme");
   const next=cur==="dark"?"light":(cur==="light"?"dark":(matchMedia("(prefers-color-scheme: dark)").matches?"light":"dark"));
   document.documentElement.setAttribute("data-theme",next);
   try{localStorage.setItem("wb-theme",next);}catch(e){}
-});
+}
+["#themeBtn","#themeBtnM"].forEach(s=>{const el=$(s);if(el)el.addEventListener("click",toggleTheme);});
 
-/* tools overflow menu (mobile: the control buttons collapse behind a ⋯ button) */
+/* "More" menu — holds Guide / Backup / Restore / (on phones) Theme */
 (function(){
-  const toggle=$("#toolsToggle"), group=$("#toolsGroup");
-  if(!toggle||!group)return;
-  const close=()=>{group.classList.remove("open");toggle.setAttribute("aria-expanded","false");};
-  toggle.addEventListener("click",e=>{
-    e.stopPropagation();
-    const willOpen=!group.classList.contains("open");
-    group.classList.toggle("open",willOpen);
-    toggle.setAttribute("aria-expanded",willOpen?"true":"false");
-  });
-  document.addEventListener("click",e=>{if(group.classList.contains("open")&&!group.contains(e.target)&&e.target!==toggle)close();});
+  const ov=$("#moreOverlay"); if(!ov)return;
+  const open=()=>ov.classList.add("on");
+  const close=()=>ov.classList.remove("on");
+  ["#moreBtnM","#moreBtnD"].forEach(s=>{const b=$(s);if(b)b.addEventListener("click",open);});
+  const c=$("#moreClose"); if(c)c.addEventListener("click",close);
+  ov.addEventListener("click",e=>{if(e.target===ov)close();});
   document.addEventListener("keydown",e=>{if(e.key==="Escape")close();});
-  group.addEventListener("click",e=>{if(e.target.closest(".icon-btn"))close();});
+  ov.querySelectorAll(".menu-item").forEach(mi=>mi.addEventListener("click",()=>setTimeout(close,0)));
 })();
 
 /* ---------- helpers ---------- */
@@ -419,6 +497,8 @@ function render(){
   const wparts=Object.keys(wtotals).map(c=>money(wtotals[c],c));
   $("#statWishValue").textContent=wparts.length?wparts.join(" · "):"—";
 
+  renderStatsPanels();
+
   const list=sortedWatches().filter(matches);
   let html=list.map(slotHTML).join("");
   html+=`<button class="slot add" id="addSlot" aria-label="Add a watch"><div class="plus">＋</div><div class="lbl">Add watch</div></button>`;
@@ -432,6 +512,39 @@ function render(){
   else en.hidden=true;
 
   const rh=$("#reorderHint"); if(rh)rh.hidden=!(dragEnabled()&&watches.length>1);
+}
+
+/* Stats view: value-by-brand (collection) + the collection/wishlist split bar */
+function renderStatsPanels(){
+  const bb=$("#byBrand");
+  if(bb){
+    const brandMap={};
+    watches.filter(w=>w.purchased&&w.cost).forEach(w=>{
+      const b=w.brand||"—", c=w.currency||"USD", n=Number(w.cost||0);
+      if(!brandMap[b])brandMap[b]={num:0,cur:{}};
+      brandMap[b].num+=n; brandMap[b].cur[c]=(brandMap[b].cur[c]||0)+n;
+    });
+    const rows=Object.entries(brandMap).sort((a,b)=>b[1].num-a[1].num);
+    const mx=rows.length?rows[0][1].num:1;
+    bb.innerHTML=rows.length
+      ? rows.map(([b,d])=>{const val=Object.keys(d.cur).map(c=>money(d.cur[c],c)).join(" · ");
+          return `<div class="brow"><div class="bn">${esc(b)}</div><div class="bv">${val}</div><div class="bbar"><i style="width:${mx?Math.round(d.num/mx*100):0}%"></i></div></div>`;}).join("")
+      : `<p class="stats-empty">Add a watch to your collection with a price to see a by-brand breakdown.</p>`;
+  }
+  const ownNum=watches.filter(w=>w.purchased&&w.cost).reduce((s,w)=>s+Number(w.cost||0),0);
+  const wishNum=watches.filter(w=>!w.purchased&&w.cost).reduce((s,w)=>s+Number(w.cost||0),0);
+  const tot=ownNum+wishNum||1;
+  const spo=$("#spOwn"), spw=$("#spWsh");
+  if(spo)spo.style.width=(ownNum/tot*100)+"%";
+  if(spw)spw.style.width=(wishNum/tot*100)+"%";
+}
+
+/* switch between the grid filters (all / owned / wish) and the Stats view */
+function setView(v){
+  navView=v;
+  document.querySelectorAll("[data-view]").forEach(el=>{const on=el.dataset.view===v;el.setAttribute("aria-selected",on?"true":"false");el.setAttribute("aria-current",on?"true":"false");});
+  if(v==="stats"){ $("#view-grid").classList.remove("on"); $("#view-stats").classList.add("on"); render(); }
+  else{ filter=v; $("#view-stats").classList.remove("on"); $("#view-grid").classList.add("on"); render(); window.scrollTo(0,0); }
 }
 
 /* ---------- detail ---------- */
@@ -454,6 +567,7 @@ function openDetail(id){
         <h3>${esc(w.model)}</h3>
         ${status}
         <dl class="specs">${rows.map(r=>`<div class="spec"><dt>${r[0]}</dt><dd>${r[1]}</dd></div>`).join("")||`<div class="spec"><dt>No specs yet</dt><dd>—</dd></div>`}</dl>
+        ${w.notes?`<div class="detail-notes"><span class="dn-label">Notes</span>${esc(w.notes)}</div>`:""}
         <div class="detail-actions">
           <button class="btn btn-primary" id="editBtn">Edit</button>
           <button class="btn btn-danger" id="delBtn">Delete</button>
@@ -485,6 +599,14 @@ function openForm(id){
   openSheet(id?"Edit watch":"Add a watch",`
     <form id="watchForm" novalidate>
       <div class="form-grid">
+        ${id?"":`<div class="link-add">
+          <label for="f-link">🔗 Add from a shop link</label>
+          <div class="link-row">
+            <input id="f-link" type="url" inputmode="url" autocomplete="off" placeholder="Paste a watch's web address…">
+            <button type="button" class="btn btn-ghost" id="linkGo">Fill</button>
+          </div>
+          <span class="hint" id="linkHint">Paste a link from a watch shop — we'll fill in what we can, and you check it before saving.</span>
+        </div>`}
         <div class="field"><label for="f-brand">Brand *</label><input id="f-brand" required list="brands" autocomplete="off" value="${esc(w.brand||"")}"></div>
         <div class="field"><label for="f-model">Model name *</label><input id="f-model" required value="${esc(w.model||"")}"></div>
         <div class="field"><label for="f-ref">Model reference</label><input id="f-ref" value="${esc(w.reference||"")}"></div>
@@ -522,6 +644,10 @@ function openForm(id){
             <input id="f-imgurl" placeholder="…or paste a direct image link (ends in .jpg / .png)" style="margin-top:8px;font-family:var(--f-ui);font-size:.88rem;color:var(--fg);background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;width:100%">
             <span class="hint" id="imgHint" style="display:block;margin-top:6px">Uploads are shrunk to save space and stay on your computer.</span>
           </div>
+        </div>
+        <div class="field full"><label for="f-notes">Notes</label>
+          <textarea id="f-notes" rows="3" placeholder="Service history, where you bought it, strap options, why it's on your wishlist…">${esc(w.notes||"")}</textarea>
+          <span class="hint">Anything you want to remember about this watch — just for you.</span>
         </div>
       </div>
       <div class="err" id="formErr"></div>
@@ -561,9 +687,60 @@ function openForm(id){
     $("#f-img").value=""; $("#f-imgurl").value="";
   });
 
+  const linkGo=$("#linkGo");
+  if(linkGo){
+    linkGo.addEventListener("click",fillFromLink);
+    $("#f-link").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();fillFromLink();}});
+  }
+
   $("#cancelBtn").onclick=closeSheet;
   $("#watchForm").addEventListener("submit",ev=>{ev.preventDefault();saveWatch(purchased);});
   setTimeout(()=>$("#f-brand").focus(),30);
+}
+
+/* Pull brand / model / price / photo from a shop link via the Worker, then let
+   the user review before saving. Only fills empty fields — never clobbers typing.
+   Any failure is soft: the form stays usable and the link is theirs to work from. */
+async function fillFromLink(){
+  const inp=$("#f-link"), btn=$("#linkGo"), hint=$("#linkHint");
+  if(!inp||!btn||!hint) return;
+  const url=(inp.value||"").trim();
+  if(!/^https?:\/\/\S+\.\S+/i.test(url)){
+    hint.className="hint"; hint.textContent="Paste a full web address — it should start with http.";
+    return;
+  }
+  btn.disabled=true; const label=btn.textContent; btn.textContent="…";
+  hint.className="hint working"; hint.textContent="Reading that page…";
+  try{
+    const res=await fetch(WORKER_URL+"?url="+encodeURIComponent(url),{headers:{Accept:"application/json"}});
+    const d=await res.json();
+    let filled=0;
+    const setVal=(sel,val)=>{const el=$(sel); if(el&&val&&!el.value.trim()){el.value=val; filled++;}};
+    setVal("#f-brand",d.brand);
+    setVal("#f-model",d.model);
+    if(d.price){
+      const p=parseFloat(String(d.price).replace(/[^0-9.]/g,""));
+      const cost=$("#f-cost");
+      if(isFinite(p)&&cost&&!cost.value.trim()){cost.value=p; filled++;}
+    }
+    if(d.currency){
+      const c=String(d.currency).toUpperCase();
+      if(CURRENCIES.includes(c)){const cur=$("#f-cur"); if(cur)cur.value=c;}
+    }
+    if(d.image){
+      const iu=$("#f-imgurl");
+      if(iu){iu.value=d.image; iu.dispatchEvent(new Event("input")); filled++;}
+    }
+    hint.className="hint";
+    hint.textContent=filled
+      ? "Filled in what we found — check the details, then add to your box."
+      : "Couldn't read that shop automatically — fill the details in yourself (your link's still here).";
+  }catch(e){
+    hint.className="hint";
+    hint.textContent="Couldn't reach that page just now — add the details in yourself.";
+  }finally{
+    btn.disabled=false; btn.textContent=label;
+  }
 }
 
 async function saveWatch(purchased){
@@ -586,6 +763,7 @@ async function saveWatch(purchased){
     purchaseDate:purchased?($("#f-date").value||""):"",
     cost:num("#f-cost"),
     currency:$("#f-cur").value,
+    notes:$("#f-notes").value.trim(),
     image,
     createdAt:existing?existing.createdAt:Date.now(),
     order:existing&&typeof existing.order==="number"?existing.order:maxOrder+1
@@ -781,14 +959,11 @@ async function ensureOrder(){
   try{await Store.bulkPut(sorted);}catch(e){}
 }
 $("#addBtn").addEventListener("click",()=>openForm());
-document.querySelectorAll(".filters button").forEach(b=>{
-  b.addEventListener("click",()=>{
-    filter=b.dataset.filter;
-    document.querySelectorAll(".filters button").forEach(x=>x.setAttribute("aria-selected",x===b?"true":"false"));
-    render();
-  });
+const fabEl=$("#fab"); if(fabEl)fabEl.addEventListener("click",()=>openForm());
+document.querySelectorAll("[data-view]").forEach(b=>{
+  b.addEventListener("click",()=>setView(b.dataset.view));
 });
-$("#search").addEventListener("input",e=>{search=e.target.value.trim().toLowerCase();render();});
+$("#search").addEventListener("input",e=>{search=e.target.value.trim().toLowerCase(); if(navView==="stats")setView("all"); else render();});
 
 /* ---------- boot ---------- */
 (async function boot(){
